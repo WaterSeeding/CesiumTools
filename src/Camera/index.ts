@@ -64,7 +64,7 @@ class Camera {
     );
   }
 
-  setFly(cameraParams: CameraParamsInterface, completeCb: Function) {
+  setFly(cameraParams: CameraParamsInterface, completeCb?: Function) {
     this.camera.flyTo({
       destination: Cesium.Cartesian3.fromDegrees(
         cameraParams.position.longitude,

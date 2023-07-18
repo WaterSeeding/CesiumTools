@@ -37,7 +37,7 @@ export const setGui = (
   light: Cesium.DirectionalLight,
   storeCb: Function
 ) => {
-  let light_folder = gui.addFolder("directionalLight");
+  let light_folder = gui.addFolder("DirectionalLight");
   light_folder.close();
 
   let initGuiParams = Object.assign({}, guiParams);

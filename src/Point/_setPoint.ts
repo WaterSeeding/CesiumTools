@@ -27,7 +27,7 @@ const setPoint = (
         new Cesium.Cartesian3(0, 20, 0),
         new Cesium.Cartesian3(),
       );
-      let url = require(`./_img/${name}.png`);
+      let url = `./img/${name}.png`;
       if (info.properties.number) {
         let num = info.properties.number;
         let isQiye = name.includes('企业');

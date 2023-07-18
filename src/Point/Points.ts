@@ -1,11 +1,11 @@
 import * as Cesium from "cesium";
-import Point from './Point';
-import { addPoint } from './_addPoint';
-import showPoint from './_showPoint';
-import hidePoint from './_hidePoint';
-import normalPoint from './_normalPoint';
-import activatingPoint from './_activatingPoint';
-import { openPointEvent, closePointEvent } from './_handlePoint';
+import Point from "./Point";
+import { addPoint } from "./_addPoint";
+import showPoint from "./_showPoint";
+import hidePoint from "./_hidePoint";
+import normalPoint from "./_normalPoint";
+import activatingPoint from "./_activatingPoint";
+import { openPointEvent, closePointEvent } from "./_handlePoint";
 
 export interface entityCollectionType {
   id: string;
@@ -29,13 +29,13 @@ class Points extends Point {
   public async reqPointInfo(
     name: string,
     data: any[],
-    setPrepareCb?: Function,
+    setPrepareCb?: Function
   ) {
     let resData = await addPoint(
       this.entityCollections,
       this.viewer,
       name,
-      data,
+      data
     );
     if (resData && resData.length > 0) {
       this.entityCollectionNames = [...this.entityCollectionNames, resData[0]];
@@ -47,7 +47,7 @@ class Points extends Point {
     targetEntity: Cesium.Entity,
     name: string,
     setActivatingCb?: Function,
-    setNormalCb?: Function,
+    setNormalCb?: Function
   ) => {
     try {
       if (this.activatingEntity?.id) {
@@ -63,20 +63,20 @@ class Points extends Point {
         this.setActivatingPoint(targetEntity, name, setActivatingCb);
       }
     } catch (e) {
-      console.warn('撒点激活异常');
+      console.warn("撒点激活异常");
     }
   };
 
   public setActivatingPoint(
     targetEntity: Cesium.Entity,
     name: string,
-    setActivatingCb?: Function,
+    setActivatingCb?: Function
   ) {
     activatingPoint(this, targetEntity);
     setActivatingCb?.(
       targetEntity.position!.getValue(new Cesium.JulianDate()),
       targetEntity.properties!.info._value,
-      name,
+      name
     );
     this.flytoPointIcon(this.viewer, targetEntity, () => {});
   }
@@ -93,7 +93,7 @@ class Points extends Point {
     setPrepareCb?: Function,
     setActivatingCb?: Function,
     setNormalCb?: Function,
-    scale?: any,
+    scale?: any
   ) {
     await hidePoint(this.entityCollections);
 
@@ -105,7 +105,7 @@ class Points extends Point {
         namesData,
         (key: string, data: any) => {
           this.reqPointInfo(key, data.features, setPrepareCb);
-        },
+        }
       );
       openPointEvent(
         this.viewer,
@@ -116,9 +116,9 @@ class Points extends Point {
             pickEntity,
             pickName,
             setActivatingCb,
-            setNormalCb,
+            setNormalCb
           );
-        },
+        }
       );
     }
   }
@@ -133,17 +133,17 @@ class Points extends Point {
   public setCall(
     id: string,
     setActivatingCb?: Function,
-    setNormalCb?: Function,
+    setNormalCb?: Function
   ) {
     let pickEntity = this.viewer.entities.getById(id);
-    let pickNames = id.split('_');
+    let pickNames = id.split("_");
     if (pickNames?.length && pickNames.length > 0 && pickEntity) {
       let pickName = pickNames[1];
       this.activatingPointIcon(
         pickEntity,
         pickName,
         setActivatingCb,
-        setNormalCb,
+        setNormalCb
       );
     }
   }

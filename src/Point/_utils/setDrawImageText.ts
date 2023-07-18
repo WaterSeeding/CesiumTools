@@ -1,4 +1,4 @@
-import { Cesium } from '@sl-theia/vis';
+import * as Cesium from "cesium";
 
 const loadImg = (url: string) => {
   return new Promise((resolve, reject) => {
