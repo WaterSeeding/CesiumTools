@@ -1,0 +1,124 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "屋顶治理 1",
+        "id": 1
+      },
+      "geometry": {
+        "coordinates": [
+          114.0466008655057,
+          22.507475963139655
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "屋顶治理 2",
+        "id": 2
+      },
+      "geometry": {
+        "coordinates": [
+          114.0481854207485,
+          22.508383265873377
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "屋顶治理 3",
+        "id": 3
+      },
+      "geometry": {
+        "coordinates": [
+          114.05460536414824,
+          22.510132232740688
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "屋顶治理 4",
+        "id": 4
+      },
+      "geometry": {
+        "coordinates": [
+          114.05048000760837,
+          22.507655139608147
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "屋顶治理 5",
+        "id": 5
+      },
+      "geometry": {
+        "coordinates": [
+          114.04952107714621,
+          22.50912029626602
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "屋顶治理 6",
+        "id": 6
+      },
+      "geometry": {
+        "coordinates": [
+          114.0531570285134,
+          22.50678851509312
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "屋顶治理 7",
+        "id": 7
+      },
+      "geometry": {
+        "coordinates": [
+          114.05320150507595,
+          22.509048389833808
+        ],
+        "type": "Point"
+      }
+    }
+  ]
+}

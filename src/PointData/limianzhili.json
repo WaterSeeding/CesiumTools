@@ -1,0 +1,124 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "立面治理 1",
+        "id": 1
+      },
+      "geometry": {
+        "coordinates": [
+          114.04958447737152,
+          22.507267499647497
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "立面治理 2",
+        "id": 2
+      },
+      "geometry": {
+        "coordinates": [
+          114.04848628917085,
+          22.509132182827628
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "立面治理 3",
+        "id": 3
+      },
+      "geometry": {
+        "coordinates": [
+          114.05474991296995,
+          22.508442479366465
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "立面治理 4",
+        "id": 4
+      },
+      "geometry": {
+        "coordinates": [
+          114.05127396594872,
+          22.50866656782874
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "立面治理 5",
+        "id": 5
+      },
+      "geometry": {
+        "coordinates": [
+          114.0515101517235,
+          22.506997067544575
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "立面治理 6",
+        "id": 6
+      },
+      "geometry": {
+        "coordinates": [
+          114.05278094298336,
+          22.508178270893538
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "立面治理 7",
+        "id": 7
+      },
+      "geometry": {
+        "coordinates": [
+          114.05269002462512,
+          22.509726345053764
+        ],
+        "type": "Point"
+      }
+    }
+  ]
+}

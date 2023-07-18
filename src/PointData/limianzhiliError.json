@@ -1,0 +1,56 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "立面治理错误 1",
+        "id": 1
+      },
+      "geometry": {
+        "coordinates": [
+          114.05043257713237,
+          22.5097002847791
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "立面治理错误 2",
+        "id": 2
+      },
+      "geometry": {
+        "coordinates": [
+          114.05273388830528,
+          22.50864746583916
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "立面治理错误 3",
+        "id": 3
+      },
+      "geometry": {
+        "coordinates": [
+          114.05065714341623,
+          22.50761601950751
+        ],
+        "type": "Point"
+      }
+    }
+  ]
+}

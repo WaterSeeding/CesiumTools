@@ -1,0 +1,56 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "烟感出错 1",
+        "id": 1
+      },
+      "geometry": {
+        "coordinates": [
+          114.04861077713696,
+          22.509673461170323
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "烟感出错 2",
+        "id": 2
+      },
+      "geometry": {
+        "coordinates": [
+          114.05155063976628,
+          22.50811922472154
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "烟感出错 3",
+        "id": 3
+      },
+      "geometry": {
+        "coordinates": [
+          114.05374792478187,
+          22.508530963687463
+        ],
+        "type": "Point"
+      }
+    }
+  ]
+}

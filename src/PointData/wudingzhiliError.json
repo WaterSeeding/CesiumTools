@@ -1,0 +1,56 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "屋顶治理错误 1",
+        "id": 1
+      },
+      "geometry": {
+        "coordinates": [
+          114.04893416065704,
+          22.509392009377123
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "屋顶治理错误 2",
+        "id": 2
+      },
+      "geometry": {
+        "coordinates": [
+          114.05089139498614,
+          22.50664683722161
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "屋顶治理错误 3",
+        "id": 3
+      },
+      "geometry": {
+        "coordinates": [
+          114.05263664636459,
+          22.508470671647018
+        ],
+        "type": "Point"
+      }
+    }
+  ]
+}

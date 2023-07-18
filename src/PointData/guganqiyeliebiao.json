@@ -1,0 +1,113 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "企业列表 1",
+        "id": 1,
+        "number": 20
+      },
+      "geometry": {
+        "coordinates": [
+          114.04991492978962,
+          22.508140410818655
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "企业列表 2",
+        "id": 2,
+        "number": 30
+      },
+      "geometry": {
+        "coordinates": [
+          114.0506480910446,
+          22.50828825000086
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "企业列表 3",
+        "id": 3,
+        "number": 60
+      },
+      "geometry": {
+        "coordinates": [
+          114.05213025911598,
+          22.50830761295667
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "企业列表 4",
+        "id": 4,
+        "number": 80
+      },
+      "geometry": {
+        "coordinates": [
+          114.04898416799045,
+          22.506750216489195
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "企业列表 5",
+        "id": 5,
+        "number": 96
+      },
+      "geometry": {
+        "coordinates": [
+          114.05391996471423,
+          22.50840435862584
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "circle",
+        "name": "企业列表 6",
+        "id": 6,
+        "number": 58
+      },
+      "geometry": {
+        "coordinates": [
+          114.05261645927123,
+          22.510086946528446
+        ],
+        "type": "Point"
+      }
+    }
+  ]
+}
