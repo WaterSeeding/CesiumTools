@@ -1,25 +1,20 @@
 import * as Cesium from "cesium";
-import { setPointNormalImg } from './_setPointImg';
 
-const normalPoint = async (
+const normalPoint = (
   _self: {
     activatingEntity: Cesium.Entity | undefined;
     [propName: string]: any;
   },
-  cb?: Function,
+  cb?: Function
 ) => {
   if (_self.activatingEntity?.id) {
     let currentActivatingInfo = _self.activatingEntity.properties!.getValue(
-      new Cesium.JulianDate(),
+      new Cesium.JulianDate()
     );
-    let currentActivatingName = currentActivatingInfo.type;
-    let normalImg = await setPointNormalImg(
-      currentActivatingName,
-      currentActivatingInfo.info,
-    );
+    let normalImg = currentActivatingInfo.url.normal;
     if (_self.activatingEntity?.billboard) {
       _self.activatingEntity.billboard!.image = new Cesium.ConstantProperty(
-        normalImg,
+        normalImg
       );
       _self.activatingEntity = undefined;
     }

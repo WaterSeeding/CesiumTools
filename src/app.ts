@@ -45,18 +45,36 @@ const showPoint = (names: string[]) => {
   points.setShows(
     names,
     {
-      ["检出问题"]: JianchuwentiPointData,
-      ["检出问题_待处置"]: JianchuwentDaichuzhiiPointData,
-      ["检出问题_处置中"]: JianchuwentChuzhizhongPointData,
+      ["检出问题"]: {
+        data: JianchuwentiPointData,
+        img: {
+          normal: "./img/检出问题.png",
+          active: "./img/检出问题_active.png",
+        },
+      },
+      ["检出问题_待处置"]: {
+        data: JianchuwentDaichuzhiiPointData,
+        img: {
+          normal: "./img/检出问题_待处置.png",
+          active: "./img/检出问题_待处置_active.png",
+        },
+      },
+      ["检出问题_处置中"]: {
+        data: JianchuwentChuzhizhongPointData,
+        img: {
+          normal: "./img/检出问题_处置中.png",
+          active: "./img/检出问题_处置中_active.png",
+        },
+      },
     },
     (data: any) => {
-      console.warn("[setPrepareCb]:", data);
+      // console.warn("[setPrepareCb]:", data);
     },
     (position: Cesium.Cartesian3, info: any, name: string) => {
-      console.log("[setActivatingCb]", position, info, name);
+      // console.log("[setActivatingCb]", position, info, name);
     },
     () => {
-      console.log("[setNormalCb]");
+      // console.log("[setNormalCb]");
     }
   );
 };
@@ -70,10 +88,9 @@ points_folder.open();
 
 let points_func = {
   show: () => {
-    showPoint(["检出问题"]);
+    showPoint(["检出问题", "检出问题_待处置", "检出问题_处置中"]);
   },
   hide: () => {
-    console.log("隐藏撒点");
     hidePoint();
   },
 };
