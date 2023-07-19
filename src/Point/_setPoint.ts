@@ -1,5 +1,4 @@
 import * as Cesium from "cesium";
-import setDrawImageText from './_utils/setDrawImageText';
 
 const setPoint = (
   viewer: Cesium.Viewer,
@@ -9,6 +8,10 @@ const setPoint = (
   pos: number[],
   img: HTMLImageElement,
   info: any,
+  url: {
+    normal: string;
+    active: string;
+  }
 ) => {
   return new Promise(async (resolve, reject) => {
     if (!pos[0] && !pos[1]) resolve(null);
@@ -25,14 +28,8 @@ const setPoint = (
       entityPosition = Cesium.Cartesian3.add(
         entityPosition,
         new Cesium.Cartesian3(0, 20, 0),
-        new Cesium.Cartesian3(),
+        new Cesium.Cartesian3()
       );
-      let url = `./img/${name}.png`;
-      if (info.properties.number) {
-        let num = info.properties.number;
-        let isQiye = name.includes('企业');
-        url = await setDrawImageText(url, num + '', isQiye);
-      }
       let entity = viewer.entities.add({
         id: id,
         name: id,
@@ -40,9 +37,10 @@ const setPoint = (
         properties: {
           info,
           type: name,
+          url,
         },
         billboard: {
-          image: url,
+          image: new Cesium.ConstantProperty(img),
           color: Cesium.Color.WHITE.withAlpha(1),
           height: img.height * 0.4,
           width: img.width * 0.4,
@@ -52,9 +50,9 @@ const setPoint = (
         show: true,
       });
       entityCollection.add(entity);
-      resolve('设置撒点成功!');
+      resolve("设置撒点成功!");
     } catch (e) {
-      reject('设置撒点出错!');
+      reject("设置撒点出错!");
     }
   });
 };

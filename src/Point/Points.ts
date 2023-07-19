@@ -28,14 +28,21 @@ class Points extends Point {
 
   public async reqPointInfo(
     name: string,
-    data: any[],
+    info: {
+      data: any;
+      img: {
+        normal: string;
+        active: string;
+      };
+    },
     setPrepareCb?: Function
   ) {
     let resData = await addPoint(
       this.entityCollections,
       this.viewer,
       name,
-      data
+      info.data.features,
+      info.img
     );
     if (resData && resData.length > 0) {
       this.entityCollectionNames = [...this.entityCollectionNames, resData[0]];
@@ -89,7 +96,15 @@ class Points extends Point {
 
   public async setShows(
     names: string[],
-    namesData: object,
+    namesInfo: {
+      [propName: string]: {
+        data: any;
+        img: {
+          normal: string;
+          active: string;
+        };
+      };
+    },
     setPrepareCb?: Function,
     setActivatingCb?: Function,
     setNormalCb?: Function,
@@ -102,9 +117,9 @@ class Points extends Point {
         this.viewer,
         this.entityCollections,
         names,
-        namesData,
+        namesInfo,
         (key: string, data: any) => {
-          this.reqPointInfo(key, data.features, setPrepareCb);
+          this.reqPointInfo(key, data, setPrepareCb);
         }
       );
       openPointEvent(

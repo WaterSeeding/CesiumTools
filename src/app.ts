@@ -6,6 +6,7 @@ import Camera from "./Camera/index";
 import Clock from "./Clock/index";
 import DirectionalLight from "./DirectionalLight/index";
 import Points from "./Point/Points";
+import Popup from "./Popup/index";
 import JianchuwentiPointData from "./PointData/jianchuwenti";
 import JianchuwentDaichuzhiiPointData from "./PointData/jianchuwenti_daichuzhi";
 import JianchuwentChuzhizhongPointData from "./PointData/jianchuwenti_chuzhizhong";
@@ -45,18 +46,36 @@ const showPoint = (names: string[]) => {
   points.setShows(
     names,
     {
-      ["检出问题"]: JianchuwentiPointData,
-      ["检出问题_待处置"]: JianchuwentDaichuzhiiPointData,
-      ["检出问题_处置中"]: JianchuwentChuzhizhongPointData,
+      ["检出问题"]: {
+        data: JianchuwentiPointData,
+        img: {
+          normal: "./img/检出问题.png",
+          active: "./img/检出问题_active.png",
+        },
+      },
+      ["检出问题_待处置"]: {
+        data: JianchuwentDaichuzhiiPointData,
+        img: {
+          normal: "./img/检出问题_待处置.png",
+          active: "./img/检出问题_待处置_active.png",
+        },
+      },
+      ["检出问题_处置中"]: {
+        data: JianchuwentChuzhizhongPointData,
+        img: {
+          normal: "./img/检出问题_处置中.png",
+          active: "./img/检出问题_处置中_active.png",
+        },
+      },
     },
     (data: any) => {
-      console.warn("[setPrepareCb]:", data);
+      console.log("[setPrepareCb]事件");
     },
     (position: Cesium.Cartesian3, info: any, name: string) => {
-      console.log("[setActivatingCb]", position, info, name);
+      console.log("[setActivatingCb]事件");
     },
     () => {
-      console.log("[setNormalCb]");
+      console.log("[setNormalCb]事件");
     }
   );
 };
@@ -66,17 +85,66 @@ const hidePoint = () => {
 };
 
 let points_folder = gui.addFolder("Points");
-points_folder.open();
+points_folder.close();
 
 let points_func = {
   show: () => {
-    showPoint(["检出问题"]);
+    showPoint(["检出问题", "检出问题_待处置", "检出问题_处置中"]);
   },
   hide: () => {
-    console.log("隐藏撒点");
     hidePoint();
   },
 };
 
 points_folder.add(points_func, "show").name("显示撒点");
 points_folder.add(points_func, "hide").name("隐藏撒点");
+
+let popup = new Popup({});
+const setPopupOpen = (
+  viewer: Cesium.Viewer,
+  position: Cesium.Cartesian3,
+  popupHtml: HTMLElement,
+  openCb?: Function,
+  closeCb?: Function
+) => {
+  if (popup.open) {
+    return false;
+  }
+  popup.on("open", function () {
+    openCb && openCb();
+  });
+  popup.on("close", function () {
+    closeCb && closeCb();
+  });
+  popup.setPosition(position);
+  popup.setHTML(popupHtml);
+  popup.add(viewer);
+};
+
+const setPopupClose = () => {
+  if (!popup.open) {
+    return false;
+  }
+  popup.remove();
+};
+
+let popup_folder = gui.addFolder("Popup");
+popup_folder.close();
+
+let popup_func = {
+  show: () => {
+    let position = Cesium.Cartesian3.fromDegrees(
+      114.05104099176157,
+      22.509032825095247,
+      100
+    );
+    let popupHtml = document.getElementById("popup");
+    setPopupOpen(viewer, position, popupHtml);
+  },
+  hide: () => {
+    setPopupClose();
+  },
+};
+
+popup_folder.add(popup_func, "show").name("显示弹窗");
+popup_folder.add(popup_func, "hide").name("隐藏弹窗");

@@ -12,3 +12,22 @@ body,
   top: 2px;
   left: 2px;
 }
+
+body {
+  position: relative;
+}
+
+#popup {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(0%) translateY(0%);
+  pointer-events: auto;
+  z-index: 1;
+  width: 200px;
+  height: 280px;
+  box-sizing: border-box;
+  padding: 4px;
+  background-color: rgba(250, 235, 215, 0.8);
+  border-radius: 2px;
+}
