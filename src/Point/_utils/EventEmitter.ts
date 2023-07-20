@@ -28,15 +28,15 @@ class EventEmitter implements EventEmitterInterface {
       this.callbacks[_names] = [];
       cb?.();
     } else {
-      console.warn("无订阅事件");
+      console.warn('无订阅事件');
     }
   }
 
   public trigger(_name: string, message: any): any {
     if (this.callbacks.hasOwnProperty(_name)) {
-      for (let i in this.callbacks[_name]) {
-        this.callbacks[_name][i](message);
-      }
+      this.callbacks[_name].forEach((value, index) => {
+        this.callbacks[_name][index](message);
+      });
     }
   }
 }
