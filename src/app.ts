@@ -6,7 +6,8 @@ import Clock from "./Clock/index";
 import Camera from "./Camera/index";
 import DirectionalLight from "./DirectionalLight/index";
 import createPopup from "./popup";
-import _graphics from "./GradientLightWall/index";
+import graphics from "./GradientLightWall/index";
+import arcgis from "./Layer/arcgis";
 
 const gui = new dat.GUI({
   name: "Cesium GUI",
@@ -57,7 +58,7 @@ tileset.style = new Cesium.Cesium3DTileStyle({
   },
 });
 
-_graphics.craeteDynamicShadeWallGraphics({
+graphics.setDynamicShadeWallGraphics({
   positions: Cesium.Cartesian3.fromDegreesArrayHeights([
     104.07263175401185, 30.647622150198725, 500.0, 104.06369117158526,
     30.648834374000277, 500.0, 104.06437182811021, 30.62274533905387, 500.0,
@@ -65,3 +66,5 @@ _graphics.craeteDynamicShadeWallGraphics({
     30.647622150198725, 500.0,
   ]),
 });
+
+arcgis(gui);
