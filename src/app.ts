@@ -5,9 +5,7 @@ import { viewer } from "./main";
 import Clock from "./Clock/index";
 import Camera from "./Camera/index";
 import DirectionalLight from "./DirectionalLight/index";
-import createPopup from "./popup";
-import graphics from "./GradientLightWall/index";
-import arcgis from "./Layer/arcgis";
+import Subscriber from "./Subscriber/index";
 
 const gui = new dat.GUI({
   name: "Cesium GUI",
@@ -23,9 +21,9 @@ clock.setTime("2023-07-01 08:00:00");
 
 let camera = new Camera(viewer, gui, {
   position: {
-    longitude: 104.032564,
-    latitude: 30.603415,
-    height: 1755,
+    longitude: 104.050783,
+    latitude: 30.616141,
+    height: 782,
   },
   // degrees
   headingPitchRoll: {
@@ -36,7 +34,6 @@ let camera = new Camera(viewer, gui, {
 });
 
 let directionalLight = new DirectionalLight(viewer, gui);
-createPopup(gui);
 
 let tileset = viewer.scene.primitives.add(
   new Cesium.Cesium3DTileset({
@@ -58,13 +55,65 @@ tileset.style = new Cesium.Cesium3DTileStyle({
   },
 });
 
-graphics.setDynamicShadeWallGraphics({
-  positions: Cesium.Cartesian3.fromDegreesArrayHeights([
-    104.07263175401185, 30.647622150198725, 500.0, 104.06369117158526,
-    30.648834374000277, 500.0, 104.06437182811021, 30.62274533905387, 500.0,
-    104.07463538167119, 30.62285687644371, 500.0, 104.07263175401185,
-    30.647622150198725, 500.0,
-  ]),
+let box = viewer.entities.add({
+  name: "Blue box",
+  position: Cesium.Cartesian3.fromDegrees(104.060783, 30.626141, 0),
+  box: {
+    heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND,
+    dimensions: new Cesium.Cartesian3(100.0, 100.0, 250),
+    material: Cesium.Color.BLUE,
+  },
 });
 
-arcgis(gui);
+let subscriber = new Subscriber(viewer, {
+  element: viewer.canvas,
+  pickResult: {
+    enable: true,
+    moveDebounce: 0,
+  },
+});
+
+let eId: string = "";
+
+let obj = {
+  add: () => {
+    subscriber.add(
+      box,
+      (move: any, result: any) => {
+        console.log("result", result);
+      },
+      "LEFT_CLICK"
+    );
+  },
+  remove: () => {
+    subscriber.remove(box, "LEFT_CLICK");
+  },
+  addExternal: () => {
+    if (!eId) {
+      eId = subscriber.addExternal((move: any, result: any) => {
+        if (result) {
+          viewer.canvas.style.cursor = "pointer";
+        } else {
+          viewer.canvas.style.cursor = "default";
+        }
+      }, "MOUSE_MOVE");
+    }
+  },
+  removeExternal: () => {
+    if (eId) {
+      subscriber.removeExternal(eId);
+      eId = "";
+      viewer.canvas.style.cursor = "default";
+    }
+  },
+  destroy: () => {
+    subscriber.destroy();
+  },
+};
+
+let subscriber_folder = gui.addFolder("Subscriber");
+subscriber_folder.add(obj, "add").name("add订阅事件");
+subscriber_folder.add(obj, "remove").name("remove销毁事件");
+subscriber_folder.add(obj, "addExternal").name("addExternal订阅事件");
+subscriber_folder.add(obj, "removeExternal").name("removeExternal销毁事件");
+subscriber_folder.add(obj, "destroy").name("destroy销毁事件");
