@@ -6,6 +6,7 @@ import Clock from "./Clock/index";
 import Camera from "./Camera/index";
 import DirectionalLight from "./DirectionalLight/index";
 import Subscriber from "./Subscriber/index";
+import { MouseTooltip } from "./Tooltip/index";
 
 const gui = new dat.GUI({
   name: "Cesium GUI",
@@ -75,7 +76,7 @@ let subscriber = new Subscriber(viewer, {
 
 let eId: string = "";
 
-let obj = {
+let subscriber_obj = {
   add: () => {
     subscriber.add(
       box,
@@ -112,8 +113,33 @@ let obj = {
 };
 
 let subscriber_folder = gui.addFolder("Subscriber");
-subscriber_folder.add(obj, "add").name("add订阅事件");
-subscriber_folder.add(obj, "remove").name("remove销毁事件");
-subscriber_folder.add(obj, "addExternal").name("addExternal订阅事件");
-subscriber_folder.add(obj, "removeExternal").name("removeExternal销毁事件");
-subscriber_folder.add(obj, "destroy").name("destroy销毁事件");
+subscriber_folder.add(subscriber_obj, "add").name("add订阅事件");
+subscriber_folder.add(subscriber_obj, "remove").name("remove销毁事件");
+subscriber_folder
+  .add(subscriber_obj, "addExternal")
+  .name("addExternal订阅事件");
+subscriber_folder
+  .add(subscriber_obj, "removeExternal")
+  .name("removeExternal销毁事件");
+subscriber_folder.add(subscriber_obj, "destroy").name("destroy销毁事件");
+
+const mouseTooltip = new MouseTooltip(viewer);
+mouseTooltip.content = "这是一个跟随鼠标的tooltip!";
+mouseTooltip.hide();
+
+let tooltip_obj = {
+  show: () => {
+    mouseTooltip.show();
+  },
+  hide: () => {
+    mouseTooltip.hide();
+  },
+  destroy: () => {
+    mouseTooltip.destroy();
+  },
+};
+
+let tooltip_folder = gui.addFolder("Tooltip");
+tooltip_folder.add(tooltip_obj, "show").name("显示");
+tooltip_folder.add(tooltip_obj, "hide").name("隐藏");
+tooltip_folder.add(tooltip_obj, "destroy").name("销毁");
