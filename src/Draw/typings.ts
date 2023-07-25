@@ -94,10 +94,9 @@ export interface DrawOption {
 
 export type StartOption = {
   /**
-   * @desc 勾画类型 目前支持 Polygon、Line、Point、Circle、Rectangle
+   * @desc 勾画类型 Polygon多边形、POLYLINE线形、Point点、Circle圆形、Rectangle矩形
    */
   type: "POLYGON" | "POLYLINE" | "POINT" | "CIRCLE" | "RECTANGLE";
-
   /**
    * 是否只勾画一次，如果设为true，则在第一勾画结束时停止
    * @default undefined
@@ -107,12 +106,10 @@ export type StartOption = {
    * @desc 是否使用单例模式，如果开启，当勾画第二个图形时会销毁第一个图形
    */
   oneInstance?: boolean;
-
   /**
    * @desc 勾画的Entity选项，如Point对应#PointGraphics.ConstructorOptions
    */
   finalOptions?: object;
-
   /**
    * @desc 动态勾画没有确定图形时的图形配置，类型与options选项相同
    */

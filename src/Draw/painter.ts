@@ -1,26 +1,22 @@
-import type { Cartesian2, Cartesian3, PointGraphics, Viewer } from 'cesium';
-import { Entity } from 'cesium';
-import { defaultOptions } from './index';
+import * as Cesium from "cesium";
+import { defaultOptions } from "./index";
 
 interface DrawOption {
-  viewer: Viewer;
+  viewer: Cesium.Viewer;
   terrain?: boolean;
 }
 
-/**
- * @desc 画笔工具
- */
-export default class Painter {
-  _viewer: Viewer;
+class Painter {
+  _viewer: Cesium.Viewer;
   _terrain: boolean | undefined;
 
-  _activeShapePoints: Cartesian3[] = [];
+  _activeShapePoints: Cesium.Cartesian3[] = [];
 
-  _dynamicShapeEntity: Entity | undefined;
+  _dynamicShapeEntity: Cesium.Entity | undefined;
 
-  _breakPointEntities: Entity[] = [];
+  _breakPointEntities: Cesium.Entity[] = [];
 
-  _addedEntitys: Entity[] = [];
+  _addedEntitys: Cesium.Entity[] = [];
 
   constructor(options: DrawOption) {
     this._viewer = options.viewer;
@@ -29,30 +25,36 @@ export default class Painter {
 
   /**
    * 将entity添加到视图
-   * @param {Entity | Entity.ConstructorOptions} entity entity实体或者构造参数
-   * @returns {Entity} entity
+   * @param {Cesium.Entity | Cesium.Entity.ConstructorOptions} entity entity实体或者构造参数
+   * @returns {Cesium.Entity} entity
    */
-  addView(entity: Entity | Entity.ConstructorOptions): Entity {
+  addView(
+    entity: Cesium.Entity | Cesium.Entity.ConstructorOptions
+  ): Cesium.Entity {
     const newEntity = this._viewer.entities.add(entity);
     this._viewer.scene.requestRender();
     this._addedEntitys.push(newEntity);
+
     return newEntity;
   }
 
   /**
    * 移除entity
-   * @param {Entity} entity entity实体
+   * @param {Cesium.Entity} entity entity实体
    * @returns {boolean} 是否移除成功
    */
-  removeEntity(entity: Entity): boolean {
+  removeEntity(entity: Cesium.Entity): boolean {
     this._addedEntitys = this._addedEntitys.filter((item) => item !== entity);
     const bool = this._viewer.entities.remove(entity);
     this._viewer.scene.requestRender();
     return bool;
   }
 
-  createPoint(worldPosition: Cartesian3, options?: PointGraphics.ConstructorOptions): Entity {
-    return new Entity({
+  createPoint(
+    worldPosition: Cesium.Cartesian3,
+    options?: Cesium.PointGraphics.ConstructorOptions
+  ): Cesium.Entity {
+    return new Cesium.Entity({
       position: worldPosition,
       point: {
         ...defaultOptions.dynamicGraphicsOptions?.POINT,
@@ -61,9 +63,7 @@ export default class Painter {
     });
   }
 
-  pickCartesian3(position: Cartesian2): Cartesian3 | undefined {
-    // We use `viewer.scene.pickPosition` here instead of `viewer.camera.pickEllipsoid` so that
-    // we get the correct point when mousing over terrain.
+  pickCartesian3(position: Cesium.Cartesian2): Cesium.Cartesian3 | undefined {
     if (this._terrain) {
       const ray = this._viewer.camera.getPickRay(position);
       if (ray) return this._viewer.scene.globe.pick(ray, this._viewer.scene);
@@ -91,6 +91,7 @@ export default class Painter {
   }
 
   clear() {
+    console.log("[clear]");
     this.reset();
     while (this._addedEntitys.length) {
       const entity = this._addedEntitys.pop();
@@ -98,3 +99,5 @@ export default class Painter {
     }
   }
 }
+
+export default Painter;

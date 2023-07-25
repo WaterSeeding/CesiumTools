@@ -59,23 +59,23 @@ export type MeasureOptions = {
   /**
    * @example 
    * {
-        start: '起点',
-        area: '面积',
-        total: '总计',
-        formatLength: (length, unitedLength) => {
-          if (length < 1000) {
-            return length + '米';
-          }
-          return unitedLength + '千米';
-        },
-        formatArea: (area, unitedArea) => {
-          if (area < 1000000) {
-            return area + '平方米';
-          }
-          return unitedArea + '平方千米';
+      start: '起点',
+      area: '面积',
+      total: '总计',
+      formatLength: (length, unitedLength) => {
+        if (length < 1000) {
+          return length + '米';
         }
+        return unitedLength + '千米';
+      },
+      formatArea: (area, unitedArea) => {
+        if (area < 1000000) {
+          return area + '平方米';
+        }
+        return unitedArea + '平方千米';
       }
-   */
+    }
+  */
   locale?: Partial<MeasureLocaleOptions>;
 };
 

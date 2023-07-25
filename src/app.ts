@@ -7,7 +7,7 @@ import Camera from "./Camera/index";
 import DirectionalLight from "./DirectionalLight/index";
 import Subscriber from "./Subscriber/index";
 import { MouseTooltip } from "./Tooltip/index";
-import Drawer, { StartOption } from "./Draw/index";
+import Draw, { StartOption } from "./Draw/index";
 import {
   AreaMeasure,
   AreaSurfaceMeasure,
@@ -153,7 +153,7 @@ tooltip_folder.add(tooltip_obj, "show").name("显示");
 tooltip_folder.add(tooltip_obj, "hide").name("隐藏");
 tooltip_folder.add(tooltip_obj, "destroy").name("销毁");
 
-let draw = new Drawer(viewer, {
+let draw = new Draw(viewer, {
   tips: {
     init: "点击绘制",
     start: "左键添加点，右键移除点，双击结束绘制",
@@ -164,10 +164,10 @@ const setDraw = (type: StartOption["type"]) => {
   draw?.start({
     type: type,
     onEnd: (entity, positions) => {
-      console.log(
-        entity,
-        positions.map((pos) => CartesiantoLonlat(pos, viewer))
-      );
+      // console.log(
+      //   entity,
+      //   positions.map((pos) => CartesiantoLonlat(pos, viewer))
+      // );
     },
   });
 };

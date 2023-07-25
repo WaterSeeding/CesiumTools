@@ -1,4 +1,4 @@
-import { Viewer, Color, defaultValue, Entity, JulianDate } from "cesium";
+import * as Cesium from "cesium";
 import MouseTooltip from "../Tooltip/MouseTooltip";
 
 import Subscriber, { EventArgs, EventType } from "../Subscriber/index";
@@ -38,24 +38,24 @@ export const defaultOptions: DrawOption = {
     POLYLINE: {
       clampToGround: true,
       width: 2,
-      material: Color.YELLOW,
+      material: Cesium.Color.YELLOW,
     },
     POLYGON: {
-      outlineColor: Color.YELLOW,
+      outlineColor: Cesium.Color.YELLOW,
       outlineWidth: 2,
-      material: Color.DARKTURQUOISE.withAlpha(0.5),
+      material: Cesium.Color.DARKTURQUOISE.withAlpha(0.5),
     },
     POINT: {
-      color: Color.BLUE,
+      color: Cesium.Color.BLUE,
       pixelSize: 8,
-      outlineColor: Color.WHITE,
+      outlineColor: Cesium.Color.WHITE,
       outlineWidth: 1,
     },
     RECTANGLE: {
-      material: Color.YELLOW.withAlpha(0.5),
+      material: Cesium.Color.YELLOW.withAlpha(0.5),
     },
     CIRCLE: {
-      material: Color.YELLOW.withAlpha(0.5),
+      material: Cesium.Color.YELLOW.withAlpha(0.5),
       outline: true,
     },
   },
@@ -68,8 +68,8 @@ export const defaultOptions: DrawOption = {
   },
 };
 
-class Drawer {
-  private _viewer: Viewer;
+class Draw {
+  private _viewer: Cesium.Viewer;
   private _type!: StartOption["type"];
   private _terrain: boolean;
   private _subscriber: Subscriber;
@@ -84,13 +84,13 @@ class Drawer {
 
   private _option: DrawOption;
 
-  private $Instance!: Entity | any;
-  private $AddedInstance: Entity[] = [];
+  private $Instance!: Cesium.Entity | any;
+  private $AddedInstance: Cesium.Entity[] = [];
 
   private _dropPoint!: (move: EventArgs) => void;
   private _moving!: (move: EventArgs) => void;
   private _cancel!: (move: EventArgs) => void;
-  private _playOff!: (move: EventArgs) => Entity;
+  private _playOff!: (move: EventArgs) => Cesium.Entity;
 
   /**
    * @desc 操作方式
@@ -128,8 +128,8 @@ class Drawer {
   }
 
   // Partial 可以快速把某个接口类型中定义的所有属性变成可选的。
-  constructor(viewer: Viewer, options?: Partial<DrawOption>) {
-    this._option = defaultValue(options, {});
+  constructor(viewer: Cesium.Viewer, options?: Partial<DrawOption>) {
+    this._option = Cesium.defaultValue(options, {});
 
     if (!viewer) throw new Error("请输入Viewer对象！");
 
@@ -140,7 +140,10 @@ class Drawer {
     } as Required<OperationType>;
 
     this._viewer = viewer;
-    this._terrain = defaultValue(this._option.terrain, defaultOptions.terrain);
+    this._terrain = Cesium.defaultValue(
+      this._option.terrain,
+      defaultOptions.terrain
+    );
 
     this._action = this._option.action;
 
@@ -217,13 +220,15 @@ class Drawer {
    */
   start(
     config: StartOption,
-    overrideFunc: OverrideEntityFunc = (action: EventType, entity: Entity) =>
-      entity
+    overrideFunc: OverrideEntityFunc = (
+      action: EventType,
+      entity: Cesium.Entity
+    ) => entity
   ): void {
     // eslint-disable-next-line no-param-reassign
-    config = defaultValue(config, {});
-    this._once = defaultValue(config.once, true);
-    this._oneInstance = defaultValue(config.oneInstance, false);
+    config = Cesium.defaultValue(config, {});
+    this._once = Cesium.defaultValue(config.once, true);
+    this._oneInstance = Cesium.defaultValue(config.oneInstance, false);
 
     if (!this._isSupport(config.type)) {
       throw new Error(`the type '${config.type}' is not support`);
@@ -271,7 +276,9 @@ class Drawer {
       if (this._type === "POINT") {
         this._complete(overrideFunc);
         isStartDraw = false;
-        const positions = this.$Instance?.position?.getValue(new JulianDate());
+        const positions = this.$Instance?.position?.getValue(
+          new Cesium.JulianDate()
+        );
         if (config.onEnd && this.$Instance && positions)
           config.onEnd(this.$Instance, [positions]);
       }
@@ -340,7 +347,7 @@ class Drawer {
       this._typeClass.result
     );
 
-    if (this.$Instance instanceof Entity) {
+    if (this.$Instance instanceof Cesium.Entity) {
       this._viewer.entities.add(this.$Instance);
       this.$AddedInstance.push(this.$Instance);
     }
@@ -379,4 +386,4 @@ class Drawer {
   }
 }
 
-export default Drawer;
+export default Draw;
