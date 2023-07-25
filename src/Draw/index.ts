@@ -1,16 +1,15 @@
-import { Color, defaultValue, Entity, JulianDate } from "cesium";
-import { MouseTooltip } from "../Tooltip";
+import { Viewer, Color, defaultValue, Entity, JulianDate } from "cesium";
+import MouseTooltip from "../Tooltip/MouseTooltip";
 
-import Subscriber from "../Subscriber";
+import Subscriber, { EventArgs, EventType } from "../Subscriber/index";
 import Painter from "./painter";
-import Circle from "./shape/circle";
-import Line from "./shape/line";
+
 import Point from "./shape/point";
+import Line from "./shape/line";
 import Polygon from "./shape/polygon";
+import Circle from "./shape/circle";
 import Rectangle from "./shape/rectangle";
 
-import type { Viewer } from "cesium";
-import type { EventArgs, EventType } from "../Subscriber";
 import type { BasicGraphicesOptions } from "./base";
 import type {
   ActionCallback,
@@ -69,7 +68,7 @@ export const defaultOptions: DrawOption = {
   },
 };
 
-export default class Drawer {
+class Drawer {
   private _viewer: Viewer;
   private _type!: StartOption["type"];
   private _terrain: boolean;
@@ -85,7 +84,7 @@ export default class Drawer {
 
   private _option: DrawOption;
 
-  private $Instance!: Entity | void;
+  private $Instance!: Entity | any;
   private $AddedInstance: Entity[] = [];
 
   private _dropPoint!: (move: EventArgs) => void;
@@ -128,6 +127,7 @@ export default class Drawer {
     return this._status === "DESTROY";
   }
 
+  // Partial 可以快速把某个接口类型中定义的所有属性变成可选的。
   constructor(viewer: Viewer, options?: Partial<DrawOption>) {
     this._option = defaultValue(options, {});
 
@@ -162,10 +162,6 @@ export default class Drawer {
     this.mouseTooltip.enabled = false;
 
     this._status = "INIT";
-    // 为了防止产生侵入性bug，请在使用前确认相关事件是否可用，不再默认移除原生事件
-    // Object.keys(this._option.keyboard).forEach(key =>
-    //   Subscriber.removeNative(this._viewer, this._option.keyboard[key])
-    // )
   }
 
   /**
@@ -382,3 +378,5 @@ export default class Drawer {
     this._subscriber.destroy();
   }
 }
+
+export default Drawer;

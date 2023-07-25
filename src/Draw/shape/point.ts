@@ -3,7 +3,7 @@ import { defined, Entity } from 'cesium';
 import BasicGraphices from '../base';
 
 import type { Cartesian3 } from 'cesium';
-import type { EventArgs } from '@cesium-extends/subscriber';
+import type { EventArgs } from '../../Subscriber';
 import type { LifeCycle } from '../base';
 
 export default class Point extends BasicGraphices implements LifeCycle {

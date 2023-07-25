@@ -7,6 +7,15 @@ import Camera from "./Camera/index";
 import DirectionalLight from "./DirectionalLight/index";
 import Subscriber from "./Subscriber/index";
 import { MouseTooltip } from "./Tooltip/index";
+import Drawer, { StartOption } from "./Draw/index";
+import {
+  AreaMeasure,
+  AreaSurfaceMeasure,
+  DistanceMeasure,
+  DistanceSurfaceMeasure,
+  Measure,
+} from "./Measure/index";
+import { CartesiantoLonlat } from "./setCartesiantoLonlat";
 
 const gui = new dat.GUI({
   name: "Cesium GUI",
@@ -143,3 +152,135 @@ let tooltip_folder = gui.addFolder("Tooltip");
 tooltip_folder.add(tooltip_obj, "show").name("显示");
 tooltip_folder.add(tooltip_obj, "hide").name("隐藏");
 tooltip_folder.add(tooltip_obj, "destroy").name("销毁");
+
+let draw = new Drawer(viewer, {
+  tips: {
+    init: "点击绘制",
+    start: "左键添加点，右键移除点，双击结束绘制",
+  },
+});
+
+const setDraw = (type: StartOption["type"]) => {
+  draw?.start({
+    type: type,
+    onEnd: (entity, positions) => {
+      console.log(
+        entity,
+        positions.map((pos) => CartesiantoLonlat(pos, viewer))
+      );
+    },
+  });
+};
+
+const setClear = () => {
+  draw.reset();
+};
+
+let draw_obj = {
+  setPOINT: () => {
+    setDraw("POINT");
+  },
+  setPOLYLINE: () => {
+    setDraw("POLYLINE");
+  },
+  setPOLYGON: () => {
+    setDraw("POLYGON");
+  },
+  setCIRCLE: () => {
+    setDraw("CIRCLE");
+  },
+  setRECTANGLE: () => {
+    setDraw("RECTANGLE");
+  },
+  setCLEAR: () => {
+    setClear();
+  },
+};
+
+let draw_folder = gui.addFolder("Draw");
+draw_folder.add(draw_obj, "setPOINT").name("点");
+draw_folder.add(draw_obj, "setPOLYLINE").name("线");
+draw_folder.add(draw_obj, "setPOLYGON").name("多边形");
+draw_folder.add(draw_obj, "setCIRCLE").name("圆形");
+draw_folder.add(draw_obj, "setRECTANGLE").name("矩形");
+draw_folder.add(draw_obj, "setCLEAR").name("清除");
+
+let measure: any = {
+  current: null,
+};
+
+let activeTool: any = null;
+
+const setMeasureTool = (
+  name: string | null,
+  Tool: typeof Measure | null = null
+) => {
+  if (measure.current) {
+    measure.current.destroy();
+    measure.current = undefined;
+  }
+
+  const newToolName = activeTool === name ? null : name;
+  activeTool = newToolName;
+
+  if (newToolName && Tool) {
+    measure.current = new Tool(viewer, {
+      units: "kilometers",
+      locale: {
+        start: "起点",
+        area: "面积",
+        total: "总计",
+        formatLength: (length, unitedLength) => {
+          if (length < 1000) {
+            return length + "米";
+          }
+          return unitedLength + "千米";
+        },
+        formatArea: (area, unitedArea) => {
+          if (area < 1000000) {
+            return area + "平方米";
+          }
+          return unitedArea + "平方千米";
+        },
+      },
+      drawerOptions: {
+        tips: {
+          init: "点击绘制",
+          start: "左键添加点，右键移除点，双击结束绘制",
+        },
+      },
+    });
+    measure.current.start();
+  }
+};
+
+const setMeasureClear = () => {
+  measure.current?.end();
+};
+
+let measure_obj = {
+  setDistanceMeasure: () => {
+    setMeasureTool("Distance", DistanceMeasure);
+  },
+  setDistanceSurfaceMeasure: () => {
+    setMeasureTool("SurfaceDistance", DistanceSurfaceMeasure);
+  },
+  setAreaMeasure: () => {
+    setMeasureTool("Area", AreaMeasure);
+  },
+  setAreaSurfaceMeasure: () => {
+    setMeasureTool("SurfaceArea", AreaSurfaceMeasure);
+  },
+  setClear: () => {
+    setMeasureClear();
+  },
+};
+
+let measure_folder = gui.addFolder("Measure");
+measure_folder.add(measure_obj, "setDistanceMeasure").name("距离测量");
+measure_folder
+  .add(measure_obj, "setDistanceSurfaceMeasure")
+  .name("距离测量(贴地)");
+measure_folder.add(measure_obj, "setAreaMeasure").name("面积测量");
+measure_folder.add(measure_obj, "setAreaSurfaceMeasure").name("面积测量(贴地)");
+measure_folder.add(measure_obj, "setClear").name("清除");
