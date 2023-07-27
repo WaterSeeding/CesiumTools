@@ -5,29 +5,7 @@ import { viewer } from "./main";
 import Clock from "./Clock/index";
 import Camera from "./Camera/index";
 import DirectionalLight from "./DirectionalLight/index";
-// import {
-//   render as renderGeoJson,
-//   GeoJsonRenderConfig,
-//   updateDataSourcePosition,
-// } from "./GeojsonRender/index";
-
-import { PrimitiveLayer } from "./GeojsonPrimitive/index";
-import {
-  GeoJsonPrimitiveRender,
-  GeoJsonRenderConfig,
-} from "./GeojsonPrimitiveRender/index";
-
-// import Subscriber from "./Subscriber/index";
-// import { MouseTooltip } from "./Tooltip/index";
-// import Draw, { StartOption } from "./Draw/index";
-// import {
-//   AreaMeasure,
-//   AreaSurfaceMeasure,
-//   DistanceMeasure,
-//   DistanceSurfaceMeasure,
-//   Measure,
-// } from "./Measure/index";
-// import { CartesiantoLonlat } from "./setCartesiantoLonlat";
+import PrimitiveLayer from "./GeojsonPrimitive/index";
 
 const gui = new dat.GUI({
   name: "Cesium GUI",
@@ -40,20 +18,6 @@ gui.show();
 
 let clock = new Clock(viewer);
 clock.setTime("2023-07-01 08:00:00");
-
-// let camera = new Camera(viewer, gui, {
-//   position: {
-//     longitude: 119.126089,
-//     latitude: 15.116413,
-//     height: 7859413,
-//   },
-//   // degrees
-//   headingPitchRoll: {
-//     heading: 360,
-//     pitch: -89.93308,
-//     roll: 0,
-//   },
-// });
 
 let directionalLight = new DirectionalLight(viewer, gui);
 
@@ -270,130 +234,94 @@ let directionalLight = new DirectionalLight(viewer, gui);
 //   measure.current?.end();
 // };
 
-// let measure_obj = {
-//   setDistanceMeasure: () => {
-//     setMeasureTool("Distance", DistanceMeasure);
-//   },
-//   setDistanceSurfaceMeasure: () => {
-//     setMeasureTool("SurfaceDistance", DistanceSurfaceMeasure);
-//   },
-//   setAreaMeasure: () => {
-//     setMeasureTool("Area", AreaMeasure);
-//   },
-//   setAreaSurfaceMeasure: () => {
-//     setMeasureTool("SurfaceArea", AreaSurfaceMeasure);
-//   },
-//   setClear: () => {
-//     setMeasureClear();
-//   },
-// };
-
-// let measure_folder = gui.addFolder("Measure");
-// measure_folder.add(measure_obj, "setDistanceMeasure").name("距离测量");
-// measure_folder
-//   .add(measure_obj, "setDistanceSurfaceMeasure")
-//   .name("距离测量(贴地)");
-// measure_folder.add(measure_obj, "setAreaMeasure").name("面积测量");
-// measure_folder.add(measure_obj, "setAreaSurfaceMeasure").name("面积测量(贴地)");
-// measure_folder.add(measure_obj, "setClear").name("清除");
-
-// const config: GeoJsonRenderConfig = {
-//   type: "point",
-//   style: {
-//     type: "bubble",
-//     config: {
-//       field: "MAG",
-//       "fill-type": "multi",
-//       "section-type": "auto",
-//       "section-num": 10,
-//       "label-size": [2, 40],
-//       "circle-stroke-width": 1,
-//       "circle-stroke-color": "white",
-//     },
-//   },
-// };
-
-// async function addGeojsonByDataSource(
-//   viewer: Cesium.Viewer,
-//   url: string,
-//   config: GeoJsonRenderConfig
-// ) {
-//   const dataSource: Cesium.DataSource = await Cesium.GeoJsonDataSource.load(
-//     url
-//   );
-//   updateDataSourcePosition(dataSource);
-//   await renderGeoJson(dataSource, config);
-//   await viewer.dataSources.add(dataSource);
-//   return dataSource;
-// }
-
-// addGeojsonByDataSource(viewer, "./static/geojson/earthquack.geojson", config);
-const primitiveObj = new PrimitiveLayer();
-
-const config: GeoJsonRenderConfig = {
-  type: "polygon",
-  style: {
-    type: "height",
-    config: {
-      field: "est",
-      color: [
-        "#053061",
-        "#144c87",
-        "#2467a6",
-        "#3680b9",
-        "#5199c6",
-        "#75b2d4",
-        "#9ac8e0",
-        "#bcdaea",
-        "#d7e8f0",
-        "#ebeff1",
-        "#f6ece7",
-        "#fadfcf",
-        "#f9c8b0",
-        "#f3ac8e",
-        "#e88b6f",
-        "#d86755",
-        "#c64240",
-        "#ae2330",
-        "#8e0e26",
-        "#67001f",
-      ],
-      "section-type": "natural",
-      "outline-color": "transparent",
-      "height-range": [0, 500],
-    },
-  },
-};
-
-async function addGeojsonByPrimitive(
-  viewer: Cesium.Viewer,
-  url: string,
-  config: GeoJsonRenderConfig
-) {
-  const primitiveLayer = await primitiveObj.load(url);
-  await GeoJsonPrimitiveRender(primitiveObj, config);
-  viewer.scene.primitives.add(primitiveLayer.primitiveCollection);
-  viewer.scene.primitives.lowerToBottom(primitiveLayer.primitiveCollection);
-
-  return primitiveLayer;
-}
-
-addGeojsonByPrimitive(
-  viewer,
-  "./static/geojson/California_heat.geojson",
-  config
-);
-
 let camera = new Camera(viewer, gui, {
   position: {
-    longitude: -126,
-    latitude: 31,
-    height: 1000000,
+    longitude: 114.003352,
+    latitude: 22.489322,
+    height: 1379713,
   },
   // degrees
   headingPitchRoll: {
-    heading: 45,
-    pitch: -45,
+    heading: 0,
+    pitch: -90,
     roll: 0,
   },
 });
+
+const primitiveObj = new PrimitiveLayer({
+  name: "广东省行政区",
+  options: {
+    fill: Cesium.Color.BLUE.withAlpha(0.6),
+  },
+});
+
+let primitiveLayer: PrimitiveLayer | null = null;
+(async () => {
+  primitiveLayer = await primitiveObj.load(
+    "./static/geojson/city/guangdong.json"
+  );
+  viewer.scene.primitives.add(primitiveLayer.primitiveCollection);
+  viewer.scene.primitives.lowerToBottom(primitiveLayer.primitiveCollection);
+
+  let PrimitiveLayer_obj = {
+    show: true,
+    name: () => {
+      console.log(primitiveLayer.name);
+    },
+    collection: () => {
+      console.log(
+        "billboardCollection",
+        primitiveLayer.billboardCollection.length
+      );
+      console.log("labelCollection", primitiveLayer.labelCollection.length);
+      console.log(
+        "pointPrimitiveCollection",
+        primitiveLayer.pointPrimitiveCollection.length
+      );
+      console.log(
+        "primitiveCollection",
+        primitiveLayer.primitiveCollection.length
+      );
+    },
+    primitive: () => {
+      console.log("polygonPrimitive", primitiveLayer.polygonPrimitive);
+      console.log("circlePrimitive", primitiveLayer.circlePrimitive);
+      console.log("polylinePrimitive", primitiveLayer.polylinePrimitive);
+    },
+    event: () => {
+      console.log("changedEvent", primitiveLayer.changedEvent);
+      console.log("errorEvent", primitiveLayer.errorEvent);
+      console.log("loadingEvent", primitiveLayer.loadingEvent);
+    },
+    more: () => {
+      console.log("loading", primitiveLayer.loading);
+      console.log("credit", primitiveLayer.credit);
+      console.log("isDestroyed", primitiveLayer.isDestroyed);
+      console.log("crsNames", primitiveLayer.crsNames);
+      console.log("crsLinkHrefs", primitiveLayer.crsLinkHrefs);
+      console.log("crsLinkTypes", primitiveLayer.crsLinkTypes);
+      console.log("geojson", primitiveLayer.geojson);
+      console.log("pinBuilder", primitiveLayer.pinBuilder);
+      console.log("show", primitiveLayer.show);
+      console.log("featureItems", primitiveLayer.featureItems);
+      console.log("name", primitiveLayer.name);
+    },
+  };
+
+  let PrimitiveLayer_folder = gui.addFolder("PrimitiveLayer");
+  PrimitiveLayer_folder.open();
+  PrimitiveLayer_folder.add(PrimitiveLayer_obj, "show")
+    .name("显示")
+    .onChange((v) => {
+      primitiveLayer.show = v;
+    });
+  PrimitiveLayer_folder.add(PrimitiveLayer_obj, "name").name("name");
+  PrimitiveLayer_folder.add(PrimitiveLayer_obj, "collection").name(
+    "获取collection"
+  );
+  PrimitiveLayer_folder.add(PrimitiveLayer_obj, "primitive").name(
+    "获取primitive"
+  );
+  PrimitiveLayer_folder.add(PrimitiveLayer_obj, "event").name("获取event");
+  PrimitiveLayer_folder.add(PrimitiveLayer_obj, "more").name("获取more");
+})();

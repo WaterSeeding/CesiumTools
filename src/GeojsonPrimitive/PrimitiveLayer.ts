@@ -1,28 +1,4 @@
-import {
-  BillboardCollection,
-  BlendingState,
-  CircleGeometry,
-  Color,
-  ColorGeometryInstanceAttribute,
-  Credit,
-  defined,
-  DeveloperError,
-  Event,
-  GeometryInstance,
-  getFilenameFromUri,
-  LabelCollection,
-  PerInstanceColorAppearance,
-  PinBuilder,
-  PointPrimitiveCollection,
-  PolygonGeometry,
-  PolygonHierarchy,
-  PolylineColorAppearance,
-  PolylineGeometry,
-  Primitive,
-  PrimitiveCollection,
-  Resource,
-  RuntimeError,
-} from "cesium";
+import * as Cesium from "cesium";
 import { nanoid } from "nanoid";
 
 import Layer from "./Layer";
@@ -30,7 +6,6 @@ import {
   crsLinkHrefs,
   crsLinkTypes,
   crsNames,
-  defaultCrsFunction,
   geoJsonObjectTypes,
 } from "./LayerUtils";
 
@@ -45,38 +20,32 @@ import type {
   PolylinePrimitiveItem,
   PrimitiveItem,
 } from "./typings";
+import DefaultOptions from "./_config/options";
 import getPositionsCenter from "./_utils/getPositionsCenter";
-
-const DefaultColor = Color.fromCssColorString("#FC4C02");
-
-const DefaultOptions: PrimitiveLayerOptions = {
-  markerSize: 10,
-  markerColor: DefaultColor,
-  stroke: Color.WHITE,
-  strokeWidth: 2,
-  fill: DefaultColor,
-  clampToGround: false,
-};
+import setCrsFunction from "./_utils/setCrsFunction";
 
 export default class PrimitiveLayer extends Layer {
   private _name: string | undefined;
   private _isLoading: boolean;
-  private _error: Event;
-  private _loading: Event;
-  private _primitiveCollection: PrimitiveCollection;
+  private _error: Cesium.Event;
+  private _loading: Cesium.Event;
+  private _primitiveCollection: Cesium.PrimitiveCollection;
   readonly _promises: Promise<any>[];
-  private _credit: Credit | undefined;
+  private _credit: Cesium.Credit | undefined;
   private _featureItems: PrimitiveItem[] = [];
-  private _pinBuilder: PinBuilder;
-  private _circleInstances: GeometryInstance[] = [];
-  private _polygonInstances: GeometryInstance[] = [];
-  private _polylineInstances: GeometryInstance[] = [];
-  private _billboardCollection: BillboardCollection;
-  private _labelCollection: LabelCollection;
-  private _pointCollection: PointPrimitiveCollection;
-  private _circlePrimitive: Primitive | undefined;
-  private _polygonPrimitive: Primitive | undefined;
-  private _polylinePrimitive: Primitive | undefined;
+  private _pinBuilder: Cesium.PinBuilder;
+  // Instances
+  private _circleInstances: Cesium.GeometryInstance[] = [];
+  private _polygonInstances: Cesium.GeometryInstance[] = [];
+  private _polylineInstances: Cesium.GeometryInstance[] = [];
+  // Collection
+  private _billboardCollection: Cesium.BillboardCollection;
+  private _labelCollection: Cesium.LabelCollection;
+  private _pointCollection: Cesium.PointPrimitiveCollection;
+  // Primitive
+  private _circlePrimitive: Cesium.Primitive | undefined;
+  private _polygonPrimitive: Cesium.Primitive | undefined;
+  private _polylinePrimitive: Cesium.Primitive | undefined;
   private _isDestroyed = false;
   private _options: PrimitiveLayerOptions;
   private _geojson: GeoJSON.GeoJSON | undefined;
@@ -89,14 +58,15 @@ export default class PrimitiveLayer extends Layer {
     } = {}
   ) {
     super(options);
-    this._error = new Event();
+
+    this._error = new Cesium.Event();
     this._isLoading = false;
-    this._loading = new Event();
-    this._pinBuilder = new PinBuilder();
-    this._primitiveCollection = new PrimitiveCollection();
-    this._billboardCollection = new BillboardCollection();
-    this._labelCollection = new LabelCollection();
-    this._pointCollection = new PointPrimitiveCollection();
+    this._loading = new Cesium.Event();
+    this._pinBuilder = new Cesium.PinBuilder();
+    this._primitiveCollection = new Cesium.PrimitiveCollection();
+    this._billboardCollection = new Cesium.BillboardCollection();
+    this._labelCollection = new Cesium.LabelCollection();
+    this._pointCollection = new Cesium.PointPrimitiveCollection();
     this._options = { ...DefaultOptions, ...options.options };
 
     this._promises = [];
@@ -165,7 +135,7 @@ export default class PrimitiveLayer extends Layer {
 
   /**
    * Gets an event that will be raised when the underlying data changes.
-   * @type {Event}
+   * @type {Cesium.Event}
    */
   get changedEvent() {
     return this._changed;
@@ -177,14 +147,14 @@ export default class PrimitiveLayer extends Layer {
 
   /**
    * Gets an event that will be raised if an error is encountered during processing.
-   * @type {Event}
+   * @type {Cesium.Event}
    */
   get errorEvent() {
     return this._error;
   }
   /**
    * Gets an event that will be raised when the data source either starts or stops loading.
-   * @type {Event}
+   * @type {Cesium.Event}
    */
   get loadingEvent() {
     return this._loading;
@@ -294,15 +264,15 @@ export default class PrimitiveLayer extends Layer {
     const { position, style } = item;
     const id = this._generateId();
 
-    const geometry = new CircleGeometry({
+    const geometry = new Cesium.CircleGeometry({
       center: position,
       extrudedHeight: style?.extrudedHeight,
       radius: style?.radius ?? 1000,
     });
-    const instance = new GeometryInstance({
+    const instance = new Cesium.GeometryInstance({
       geometry,
       attributes: {
-        color: ColorGeometryInstanceAttribute.fromColor(
+        color: Cesium.ColorGeometryInstanceAttribute.fromColor(
           style?.color ?? this._options.fill
         ),
       },
@@ -325,15 +295,15 @@ export default class PrimitiveLayer extends Layer {
     const { positions, style } = item;
     const id = this._generateId();
 
-    const geometry = new PolygonGeometry({
-      polygonHierarchy: new PolygonHierarchy(positions),
-      vertexFormat: PerInstanceColorAppearance.VERTEX_FORMAT,
+    const geometry = new Cesium.PolygonGeometry({
+      polygonHierarchy: new Cesium.PolygonHierarchy(positions),
+      vertexFormat: Cesium.PerInstanceColorAppearance.VERTEX_FORMAT,
       extrudedHeight: style?.extrudedHeight,
     });
-    const instance = new GeometryInstance({
+    const instance = new Cesium.GeometryInstance({
       geometry,
       attributes: {
-        color: ColorGeometryInstanceAttribute.fromColor(
+        color: Cesium.ColorGeometryInstanceAttribute.fromColor(
           style?.material ?? this._options.fill
         ),
       },
@@ -367,15 +337,15 @@ export default class PrimitiveLayer extends Layer {
     const { positions, style } = item;
     const id = this._generateId();
 
-    const geometry = new PolylineGeometry({
+    const geometry = new Cesium.PolylineGeometry({
       positions,
-      vertexFormat: PolylineColorAppearance.VERTEX_FORMAT,
+      vertexFormat: Cesium.PolylineColorAppearance.VERTEX_FORMAT,
       width: style?.width,
     });
-    const instance = new GeometryInstance({
+    const instance = new Cesium.GeometryInstance({
       geometry,
       attributes: {
-        color: ColorGeometryInstanceAttribute.fromColor(
+        color: Cesium.ColorGeometryInstanceAttribute.fromColor(
           style?.material ?? this._options.stroke
         ),
       },
@@ -412,7 +382,7 @@ export default class PrimitiveLayer extends Layer {
   }
 
   /**
-   * remove featureItem from primitive collection
+   * 根据id从primitive collection中移除featureItem
    * @param {string} id featureItem id
    */
   removeFeatureItemById(id: string) {
@@ -437,39 +407,36 @@ export default class PrimitiveLayer extends Layer {
   }
 
   /**
-   * Asynchronously loads the provided GeoJSON or TopoJSON data, replacing any existing data.
+   * 通过异步加载提供的GeoJSON或TopoJSON数据，替换任何现有数据
    *
-   * @param {Resource|String|Object} data A url, GeoJSON object to be loaded.
-   * @param {Object} [options] An object with the following properties:
-   * @param {String} [options.sourceUri] Overrides the url to use for resolving relative links.
-   * @returns {Promise.<PrimitiveLayer>} a promise that will resolve when the GeoJSON is loaded.
+   * @param {Cesium.Resource|String|Object} data 加载的数据
+   * @param {Object} [options] 具有以下属性的对象:
+   * @param {String} [options.sourceUri] 覆盖要用于解析相对链接的url
+   * @returns {Promise.<PrimitiveLayer>} 根据加载GeoJSON，解析出来的Promise
    */
   async load(
-    url: string | Resource | GeoJSON.GeoJSON,
+    url: string | Cesium.Resource | GeoJSON.GeoJSON,
     options: Partial<PrimitiveLayerOptions> = {}
   ): Promise<PrimitiveLayer> {
     let data = url;
-    //>>includeStart('debug', pragmas.debug)
-    if (!defined(data)) {
-      throw new DeveloperError("data is required.");
+    if (!Cesium.defined(data)) {
+      throw new Cesium.DeveloperError("data is required.");
     }
-    //>>includeEnd('debug')
 
     this._isLoading = true;
 
-    // User specified credit
     let credit = options.credit;
     if (typeof credit === "string") {
-      credit = new Credit(credit);
+      credit = new Cesium.Credit(credit);
     }
     this._credit = credit;
 
     let promise: any = data;
     let sourceUri = options.sourceUri;
     if (typeof data === "string") {
-      data = new Resource({ url: data });
+      data = new Cesium.Resource({ url: data });
     }
-    if (data instanceof Resource) {
+    if (data instanceof Cesium.Resource) {
       promise = data.fetchJson();
       sourceUri = sourceUri ?? data.getUrlComponent();
     }
@@ -495,7 +462,7 @@ export default class PrimitiveLayer extends Layer {
 
     let name: string | undefined;
     if (sourceUri) {
-      name = getFilenameFromUri(sourceUri);
+      name = Cesium.getFilenameFromUri(sourceUri);
     }
 
     if (name && this._name !== name) {
@@ -504,49 +471,15 @@ export default class PrimitiveLayer extends Layer {
       this._changed.raiseEvent(this);
     }
 
+    // 检查坐标参考系
+    const crs = (geoJson as any).crs;
+    let crsFunction = setCrsFunction(crs);
+
     const typeHandler = geoJsonObjectTypes[geoJson.type];
-    if (!defined(typeHandler)) {
-      throw new RuntimeError(
+    if (!Cesium.defined(typeHandler)) {
+      throw new Cesium.RuntimeError(
         `Unsupported GeoJSON object type: ${geoJson.type}`
       );
-    }
-
-    //Check for a Coordinate Reference System.
-    const crs = (geoJson as any).crs;
-    let crsFunction = crs !== null ? defaultCrsFunction : null;
-
-    if (defined(crs)) {
-      if (!defined(crs.properties)) {
-        throw new RuntimeError("crs.properties is undefined.");
-      }
-
-      const properties = crs.properties;
-      if (crs.type === "name") {
-        crsFunction = crsNames[properties.name];
-        if (!defined(crsFunction)) {
-          throw new RuntimeError(`Unknown crs name: ${properties.name}`);
-        }
-      } else if (crs.type === "link") {
-        let handler = crsLinkHrefs[properties.href];
-        if (!defined(handler)) {
-          handler = crsLinkTypes[properties.type];
-        }
-
-        if (!defined(handler)) {
-          throw new RuntimeError(
-            `Unable to resolve crs link: ${JSON.stringify(properties)}`
-          );
-        }
-
-        crsFunction = handler(properties);
-      } else if (crs.type === "EPSG") {
-        crsFunction = crsNames[`EPSG:${properties.code}`];
-        if (!defined(crsFunction)) {
-          throw new RuntimeError(`Unknown crs EPSG code: ${properties.code}`);
-        }
-      } else {
-        throw new RuntimeError(`Unknown crs type: ${crs.type}`);
-      }
     }
 
     return Promise.resolve(crsFunction).then(async (crsFunc) => {
@@ -554,8 +487,8 @@ export default class PrimitiveLayer extends Layer {
         this._primitiveCollection.removeAll();
       }
 
-      // null is a valid value for the crs, but means the entire load process becomes a no-op
-      // because we can't assume anything about the coordinates.
+      // null是crs的有效值，但意味着整个加载过程变为无操作
+      // 因为我们不能对坐标做任何假设。
       if (crsFunc !== null) {
         typeHandler(
           this,
@@ -574,42 +507,31 @@ export default class PrimitiveLayer extends Layer {
     });
   }
 
-  removeAllPrimitive() {
-    this.primitiveCollection.removeAll();
-    this._billboardCollection = new BillboardCollection();
-    this._labelCollection = new LabelCollection();
-    this._pointCollection = new PointPrimitiveCollection();
-    this._featureItems = [];
-    this._circleInstances = [];
-    this._polygonInstances = [];
-    this._polylineInstances = [];
-  }
-
   reloadPrimitive() {
-    const appearance = new PerInstanceColorAppearance({
+    const appearance = new Cesium.PerInstanceColorAppearance({
       translucent: false,
       renderState: {
         depthTest: {
           enabled: true,
         },
         depthMask: true,
-        blending: BlendingState.PRE_MULTIPLIED_ALPHA_BLEND,
+        blending: Cesium.BlendingState.PRE_MULTIPLIED_ALPHA_BLEND,
       },
     });
 
-    this._circlePrimitive = new Primitive({
+    this._circlePrimitive = new Cesium.Primitive({
       geometryInstances: this._circleInstances,
       appearance,
       asynchronous: false,
     });
-    this._polygonPrimitive = new Primitive({
+    this._polygonPrimitive = new Cesium.Primitive({
       geometryInstances: this._polygonInstances,
       appearance,
       asynchronous: false,
     });
-    this._polylinePrimitive = new Primitive({
+    this._polylinePrimitive = new Cesium.Primitive({
       geometryInstances: this._polylineInstances,
-      appearance: new PolylineColorAppearance(),
+      appearance: new Cesium.PolylineColorAppearance(),
       asynchronous: false,
     });
     this._primitiveCollection.add(this._circlePrimitive);
@@ -618,6 +540,17 @@ export default class PrimitiveLayer extends Layer {
     this._primitiveCollection.add(this._billboardCollection);
     this._primitiveCollection.add(this._labelCollection);
     this._primitiveCollection.add(this._pointCollection);
+  }
+
+  removeAllPrimitive() {
+    this.primitiveCollection.removeAll();
+    this._billboardCollection = new Cesium.BillboardCollection();
+    this._labelCollection = new Cesium.LabelCollection();
+    this._pointCollection = new Cesium.PointPrimitiveCollection();
+    this._featureItems = [];
+    this._circleInstances = [];
+    this._polygonInstances = [];
+    this._polylineInstances = [];
   }
 
   destroy() {
