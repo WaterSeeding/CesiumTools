@@ -13,7 +13,7 @@ import DirectionalLight from "./DirectionalLight/index";
 
 import { PrimitiveLayer } from "./GeojsonPrimitive/index";
 import {
-  renderPrimitiveGeoJson,
+  GeoJsonPrimitiveRender,
   GeoJsonRenderConfig,
 } from "./GeojsonPrimitiveRender/index";
 
@@ -371,7 +371,7 @@ async function addGeojsonByPrimitive(
   config: GeoJsonRenderConfig
 ) {
   const primitiveLayer = await primitiveObj.load(url);
-  await renderPrimitiveGeoJson(primitiveObj, config);
+  await GeoJsonPrimitiveRender(primitiveObj, config);
   viewer.scene.primitives.add(primitiveLayer.primitiveCollection);
   viewer.scene.primitives.lowerToBottom(primitiveLayer.primitiveCollection);
 

@@ -1,23 +1,20 @@
-import { Cartesian2, LabelStyle, NearFarScalar } from "cesium";
-import type { GeoJsonRenderConfig } from "./_config/typing";
+import * as Cesium from "cesium";
 import type {
   EntityStyle,
   CustomPaintItem,
   CylinderEntityConstructor,
-} from "./_config/entityTyping";
+} from "../_config/entityTyping";
 
-import { custom2value } from "./_styles/renderTool";
-import RenderConfig2Style from "./_styles/index";
-
+import { custom2value } from "../_styles/renderTool";
 import GeoJsonPrimitiveLayer, {
   BillboardPrimitiveItem,
   CirclePrimitiveItem,
   PointPrimitiveItem,
   PolylinePrimitiveItem,
   PolygonPrimitiveItem,
-} from "../GeojsonPrimitive";
+} from "../../GeojsonPrimitive";
 
-export const primitiveGeoJsonRender = async (
+export const setPrimitiveRender = async (
   primitiveLayer: GeoJsonPrimitiveLayer,
   style: EntityStyle
 ) => {
@@ -153,10 +150,10 @@ export const primitiveGeoJsonRender = async (
         style: {
           font: `bold 20px Arial`,
           outlineWidth: 4,
-          style: LabelStyle.FILL_AND_OUTLINE,
-          pixelOffset: new Cartesian2(0, -10),
+          style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+          pixelOffset: new Cesium.Cartesian2(0, -10),
           scale: 1,
-          scaleByDistance: new NearFarScalar(1, 0.85, 8.0e6, 0.75),
+          scaleByDistance: new Cesium.NearFarScalar(1, 0.85, 8.0e6, 0.75),
           ...label.paint,
           text: label.paint.text?.replace(
             /\{([^\{]*)\}/g,
@@ -167,25 +164,4 @@ export const primitiveGeoJsonRender = async (
     }
   });
   primitiveLayer.reloadPrimitive();
-};
-
-export const renderPrimitiveGeoJson = async (
-  primitiveLayer: GeoJsonPrimitiveLayer,
-  config: GeoJsonRenderConfig
-) => {
-  const { type, style } = config;
-  if (!type || !style) return;
-
-  const data = primitiveLayer.featureItems
-    .map((feature) => feature.properties)
-    .filter((item) => item !== undefined);
-  const entityStyle: EntityStyle = await RenderConfig2Style[type](
-    data as any,
-    style as any
-  );
-  entityStyle.label = style.symbol
-    ? RenderConfig2Style.symbol(style.symbol)
-    : undefined;
-  if (entityStyle) await primitiveGeoJsonRender(primitiveLayer, entityStyle);
-  return entityStyle;
 };
