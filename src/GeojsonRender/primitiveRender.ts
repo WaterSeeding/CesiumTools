@@ -15,7 +15,7 @@ import GeoJsonPrimitiveLayer, {
   PointPrimitiveItem,
   PolylinePrimitiveItem,
   PolygonPrimitiveItem,
-} from "../GeojsonPrimitive";
+} from "../GeojsonPrimitiveLayer";
 
 export const primitiveGeoJsonRender = async (
   primitiveLayer: GeoJsonPrimitiveLayer,

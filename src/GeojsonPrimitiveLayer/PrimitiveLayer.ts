@@ -2,12 +2,7 @@ import * as Cesium from "cesium";
 import { nanoid } from "nanoid";
 
 import Layer from "./Layer";
-import {
-  crsLinkHrefs,
-  crsLinkTypes,
-  crsNames,
-  geoJsonObjectTypes,
-} from "./LayerUtils";
+import { crsLinkHrefs, crsLinkTypes, crsNames } from "./LayerUtils";
 
 import type Subscriber from "../Subscriber";
 import type {
@@ -22,6 +17,7 @@ import type {
 } from "./typings";
 import DefaultOptions from "./_config/options";
 import getPositionsCenter from "./_utils/getPositionsCenter";
+import { setGeoJsonToTypeHandler } from "./_utils/setGeoJsonToTypeHandler";
 import setCrsFunction from "./_utils/setCrsFunction";
 
 export default class PrimitiveLayer extends Layer {
@@ -133,16 +129,16 @@ export default class PrimitiveLayer extends Layer {
     return this._isLoading;
   }
 
+  get credit() {
+    return this._credit;
+  }
+
   /**
    * Gets an event that will be raised when the underlying data changes.
    * @type {Cesium.Event}
    */
   get changedEvent() {
     return this._changed;
-  }
-
-  get credit() {
-    return this._credit;
   }
 
   /**
@@ -367,7 +363,7 @@ export default class PrimitiveLayer extends Layer {
     return instance;
   }
 
-  addFeatureItem(item: PrimitiveItem) {
+  private addFeatureItem(item: PrimitiveItem) {
     this._featureItems.push(item);
     return item;
   }
@@ -474,8 +470,8 @@ export default class PrimitiveLayer extends Layer {
     // 检查坐标参考系
     const crs = (geoJson as any).crs;
     let crsFunction = setCrsFunction(crs);
-
-    const typeHandler = geoJsonObjectTypes[geoJson.type];
+    console.log('geoJson.type', geoJson.type);
+    const typeHandler = setGeoJsonToTypeHandler[geoJson.type];
     if (!Cesium.defined(typeHandler)) {
       throw new Cesium.RuntimeError(
         `Unsupported GeoJSON object type: ${geoJson.type}`

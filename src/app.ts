@@ -5,7 +5,7 @@ import { viewer } from "./main";
 import Clock from "./Clock/index";
 import Camera from "./Camera/index";
 import DirectionalLight from "./DirectionalLight/index";
-import PrimitiveLayer from "./GeojsonPrimitive/index";
+import PrimitiveLayer from "./GeojsonPrimitiveLayer/index";
 
 const gui = new dat.GUI({
   name: "Cesium GUI",
@@ -21,224 +21,11 @@ clock.setTime("2023-07-01 08:00:00");
 
 let directionalLight = new DirectionalLight(viewer, gui);
 
-// let tileset = viewer.scene.primitives.add(
-//   new Cesium.Cesium3DTileset({
-//     url: "./static/building/tileset.json",
-//   })
-// );
-// tileset.style = new Cesium.Cesium3DTileStyle({
-//   color: {
-//     conditions: [
-//       ["${height} >= 300", "rgba(0, 149, 251, 0.3)"],
-//       ["${height} >= 200", "rgb(0, 149, 251, 0.3)"],
-//       ["${height} >= 100", "rgb(0, 149, 251, 0.3)"],
-//       ["${height} >= 50", "rgb(0, 149, 251, 0.3)"],
-//       ["${height} >= 25", "rgb(0, 149, 251, 0.3)"],
-//       ["${height} >= 10", "rgb(0, 149, 251, 0.3)"],
-//       ["${height} >= 5", "rgb(0, 149, 251, 0.3)"],
-//       ["true", "rgb(0, 149, 251, 0.3)"],
-//     ],
-//   },
-// });
-
-// let box = viewer.entities.add({
-//   name: "Blue box",
-//   position: Cesium.Cartesian3.fromDegrees(104.060783, 30.626141, 0),
-//   box: {
-//     heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND,
-//     dimensions: new Cesium.Cartesian3(100.0, 100.0, 250),
-//     material: Cesium.Color.BLUE,
-//   },
-// });
-
-// let subscriber = new Subscriber(viewer, {
-//   element: viewer.canvas,
-//   pickResult: {
-//     enable: true,
-//     moveDebounce: 0,
-//   },
-// });
-
-// let eId: string = "";
-
-// let subscriber_obj = {
-//   add: () => {
-//     subscriber.add(
-//       box,
-//       (move: any, result: any) => {
-//         console.log("result", result);
-//       },
-//       "LEFT_CLICK"
-//     );
-//   },
-//   remove: () => {
-//     subscriber.remove(box, "LEFT_CLICK");
-//   },
-//   addExternal: () => {
-//     if (!eId) {
-//       eId = subscriber.addExternal((move: any, result: any) => {
-//         if (result) {
-//           viewer.canvas.style.cursor = "pointer";
-//         } else {
-//           viewer.canvas.style.cursor = "default";
-//         }
-//       }, "MOUSE_MOVE");
-//     }
-//   },
-//   removeExternal: () => {
-//     if (eId) {
-//       subscriber.removeExternal(eId);
-//       eId = "";
-//       viewer.canvas.style.cursor = "default";
-//     }
-//   },
-//   destroy: () => {
-//     subscriber.destroy();
-//   },
-// };
-
-// let subscriber_folder = gui.addFolder("Subscriber");
-// subscriber_folder.add(subscriber_obj, "add").name("add订阅事件");
-// subscriber_folder.add(subscriber_obj, "remove").name("remove销毁事件");
-// subscriber_folder
-//   .add(subscriber_obj, "addExternal")
-//   .name("addExternal订阅事件");
-// subscriber_folder
-//   .add(subscriber_obj, "removeExternal")
-//   .name("removeExternal销毁事件");
-// subscriber_folder.add(subscriber_obj, "destroy").name("destroy销毁事件");
-
-// const mouseTooltip = new MouseTooltip(viewer);
-// mouseTooltip.content = "这是一个跟随鼠标的tooltip!";
-// mouseTooltip.hide();
-
-// let tooltip_obj = {
-//   show: () => {
-//     mouseTooltip.show();
-//   },
-//   hide: () => {
-//     mouseTooltip.hide();
-//   },
-//   destroy: () => {
-//     mouseTooltip.destroy();
-//   },
-// };
-
-// let tooltip_folder = gui.addFolder("Tooltip");
-// tooltip_folder.add(tooltip_obj, "show").name("显示");
-// tooltip_folder.add(tooltip_obj, "hide").name("隐藏");
-// tooltip_folder.add(tooltip_obj, "destroy").name("销毁");
-
-// let draw = new Draw(viewer, {
-//   tips: {
-//     init: "点击绘制",
-//     start: "左键添加点，右键移除点，双击结束绘制",
-//   },
-// });
-
-// const setDraw = (type: StartOption["type"]) => {
-//   draw?.start({
-//     type: type,
-//     onEnd: (entity, positions) => {
-//       // console.log(
-//       //   entity,
-//       //   positions.map((pos) => CartesiantoLonlat(pos, viewer))
-//       // );
-//     },
-//   });
-// };
-
-// const setClear = () => {
-//   draw.reset();
-// };
-
-// let draw_obj = {
-//   setPOINT: () => {
-//     setDraw("POINT");
-//   },
-//   setPOLYLINE: () => {
-//     setDraw("POLYLINE");
-//   },
-//   setPOLYGON: () => {
-//     setDraw("POLYGON");
-//   },
-//   setCIRCLE: () => {
-//     setDraw("CIRCLE");
-//   },
-//   setRECTANGLE: () => {
-//     setDraw("RECTANGLE");
-//   },
-//   setCLEAR: () => {
-//     setClear();
-//   },
-// };
-
-// let draw_folder = gui.addFolder("Draw");
-// draw_folder.add(draw_obj, "setPOINT").name("点");
-// draw_folder.add(draw_obj, "setPOLYLINE").name("线");
-// draw_folder.add(draw_obj, "setPOLYGON").name("多边形");
-// draw_folder.add(draw_obj, "setCIRCLE").name("圆形");
-// draw_folder.add(draw_obj, "setRECTANGLE").name("矩形");
-// draw_folder.add(draw_obj, "setCLEAR").name("清除");
-
-// let measure: any = {
-//   current: null,
-// };
-
-// let activeTool: any = null;
-
-// const setMeasureTool = (
-//   name: string | null,
-//   Tool: typeof Measure | null = null
-// ) => {
-//   if (measure.current) {
-//     measure.current.destroy();
-//     measure.current = undefined;
-//   }
-
-//   const newToolName = activeTool === name ? null : name;
-//   activeTool = newToolName;
-
-//   if (newToolName && Tool) {
-//     measure.current = new Tool(viewer, {
-//       units: "kilometers",
-//       locale: {
-//         start: "起点",
-//         area: "面积",
-//         total: "总计",
-//         formatLength: (length, unitedLength) => {
-//           if (length < 1000) {
-//             return length + "米";
-//           }
-//           return unitedLength + "千米";
-//         },
-//         formatArea: (area, unitedArea) => {
-//           if (area < 1000000) {
-//             return area + "平方米";
-//           }
-//           return unitedArea + "平方千米";
-//         },
-//       },
-//       drawerOptions: {
-//         tips: {
-//           init: "点击绘制",
-//           start: "左键添加点，右键移除点，双击结束绘制",
-//         },
-//       },
-//     });
-//     measure.current.start();
-//   }
-// };
-
-// const setMeasureClear = () => {
-//   measure.current?.end();
-// };
-
 let camera = new Camera(viewer, gui, {
   position: {
-    longitude: 114.003352,
-    latitude: 22.489322,
-    height: 1379713,
+    longitude: 113.979829,
+    latitude: 22.603616,
+    height: 77553,
   },
   // degrees
   headingPitchRoll: {
@@ -249,16 +36,40 @@ let camera = new Camera(viewer, gui, {
 });
 
 const primitiveObj = new PrimitiveLayer({
-  name: "广东省行政区",
+  name: "深圳市",
   options: {
     fill: Cesium.Color.BLUE.withAlpha(0.6),
   },
 });
 
+primitiveObj.changedEvent.addEventListener(() => {
+  console.log("[changedEvent]订阅");
+});
+primitiveObj.errorEvent.addEventListener(() => {
+  console.log("[errorEvent]订阅");
+});
+primitiveObj.loadingEvent.addEventListener(() => {
+  console.log("[loadingEvent]订阅");
+});
+
 let primitiveLayer: PrimitiveLayer | null = null;
 (async () => {
   primitiveLayer = await primitiveObj.load(
-    "./static/geojson/city/guangdong.json"
+    // "./static/geojson/city/shenzhen.json",
+    // "./static/geojson/city/shenzhenPoint.json",
+    // "./static/geojson/city/shenzhenLine.json",
+    "./static/geojson/city/shenzhenRing.json",
+    {
+      fill: Cesium.Color.RED.withAlpha(0.8),
+      markerSymbol: "hospital",
+      markerColor: Cesium.Color.BLUE,
+      markerSize: 10,
+      stroke: Cesium.Color.GREEN,
+      strokeWidth: 5,
+      credit: new Cesium.Credit(
+        '<a href="https://cesiumjs.org/" target="_blank"><img src="./static/img/icon.png" title="Cesium"/></a>'
+      ),
+    }
   );
   viewer.scene.primitives.add(primitiveLayer.primitiveCollection);
   viewer.scene.primitives.lowerToBottom(primitiveLayer.primitiveCollection);
@@ -283,10 +94,24 @@ let primitiveLayer: PrimitiveLayer | null = null;
         primitiveLayer.primitiveCollection.length
       );
     },
+    collectionContent: {
+      billboardCollection: true,
+      labelCollection: true,
+      pointPrimitiveCollection: true,
+      primitiveCollection: true,
+    },
     primitive: () => {
       console.log("polygonPrimitive", primitiveLayer.polygonPrimitive);
       console.log("circlePrimitive", primitiveLayer.circlePrimitive);
       console.log("polylinePrimitive", primitiveLayer.polylinePrimitive);
+    },
+    primitiveContent: {
+      polygonPrimitive: true,
+      circlePrimitive: true,
+      polylinePrimitive: true,
+    },
+    removeAllPrimitive: () => {
+      primitiveLayer.removeAllPrimitive();
     },
     event: () => {
       console.log("changedEvent", primitiveLayer.changedEvent);
@@ -319,9 +144,74 @@ let primitiveLayer: PrimitiveLayer | null = null;
   PrimitiveLayer_folder.add(PrimitiveLayer_obj, "collection").name(
     "获取collection"
   );
+
+  if (primitiveLayer.billboardCollection.length > 0) {
+    PrimitiveLayer_folder.add(
+      PrimitiveLayer_obj.collectionContent,
+      "billboardCollection"
+    ).onChange((v) => {
+      primitiveLayer.billboardCollection.show = v;
+    });
+  }
+
+  if (primitiveLayer.labelCollection.length > 0) {
+    PrimitiveLayer_folder.add(
+      PrimitiveLayer_obj.collectionContent,
+      "labelCollection"
+    ).onChange((v) => {
+      primitiveLayer.labelCollection.show = v;
+    });
+  }
+
+  if (primitiveLayer.pointPrimitiveCollection.length > 0) {
+    PrimitiveLayer_folder.add(
+      PrimitiveLayer_obj.collectionContent,
+      "pointPrimitiveCollection"
+    ).onChange((v) => {
+      primitiveLayer.pointPrimitiveCollection.show = v;
+    });
+  }
+
+  if (primitiveLayer.primitiveCollection.length > 0) {
+    PrimitiveLayer_folder.add(
+      PrimitiveLayer_obj.collectionContent,
+      "primitiveCollection"
+    ).onChange((v) => {
+      primitiveLayer.primitiveCollection.show = v;
+    });
+  }
+
   PrimitiveLayer_folder.add(PrimitiveLayer_obj, "primitive").name(
     "获取primitive"
   );
+  if (primitiveLayer.polygonPrimitive) {
+    PrimitiveLayer_folder.add(
+      PrimitiveLayer_obj.primitiveContent,
+      "polygonPrimitive"
+    ).onChange((v) => {
+      primitiveLayer.polygonPrimitive.show = v;
+    });
+  }
+  if (primitiveLayer.circlePrimitive) {
+    PrimitiveLayer_folder.add(
+      PrimitiveLayer_obj.primitiveContent,
+      "circlePrimitive"
+    ).onChange((v) => {
+      primitiveLayer.circlePrimitive.show = v;
+    });
+  }
+  if (primitiveLayer.polylinePrimitive) {
+    PrimitiveLayer_folder.add(
+      PrimitiveLayer_obj.primitiveContent,
+      "polylinePrimitive"
+    ).onChange((v) => {
+      primitiveLayer.polylinePrimitive.show = v;
+    });
+  }
+  PrimitiveLayer_folder.add(PrimitiveLayer_obj, "removeAllPrimitive").name(
+    "removeAllPrimitive"
+  );
   PrimitiveLayer_folder.add(PrimitiveLayer_obj, "event").name("获取event");
+  PrimitiveLayer_folder.add(PrimitiveLayer_obj, "more").name("获取more");
   PrimitiveLayer_folder.add(PrimitiveLayer_obj, "more").name("获取more");
 })();

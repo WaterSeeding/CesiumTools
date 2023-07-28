@@ -2,7 +2,7 @@ import type { GeoJsonRenderConfig } from "../_config/typing";
 import type { EntityStyle } from "../_config/entityTyping";
 import RenderConfig2Style from "../_styles/index";
 
-import GeoJsonPrimitiveLayer from "../../GeojsonPrimitive";
+import GeoJsonPrimitiveLayer from "../../GeojsonPrimitiveLayer";
 import { setPrimitiveRender } from "./setPrimitiveRender";
 
 export const GeoJsonPrimitiveRender = async (
