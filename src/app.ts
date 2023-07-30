@@ -55,10 +55,10 @@ primitiveObj.loadingEvent.addEventListener(() => {
 let primitiveLayer: PrimitiveLayer | null = null;
 (async () => {
   primitiveLayer = await primitiveObj.load(
-    // "./static/geojson/city/shenzhen.json",
+    "./static/geojson/city/shenzhen.json",
     // "./static/geojson/city/shenzhenPoint.json",
     // "./static/geojson/city/shenzhenLine.json",
-    "./static/geojson/city/shenzhenRing.json",
+    // "./static/geojson/city/shenzhenRing.json",
     {
       fill: Cesium.Color.RED.withAlpha(0.8),
       markerSymbol: "hospital",
